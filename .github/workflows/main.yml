@@ -47,7 +47,15 @@ jobs:
             echo "🏷️ Tag does not exist: $tag"
             exit 0
           }
-      
+
+      - name: Setup xmake
+        uses: xmake-io/github-action-setup-xmake@v1
+        with:
+          # ref: https://github.com/xmake-io/xmake/blob/dev/.github/workflows/windows.yml
+          xmake-version: latest
+          actions-cache-folder: '.xmake-cache'
+          actions-cache-key: ${{ runner.os }}
+
       - name: Pack
         run: |
           xmake pack
