@@ -6,7 +6,7 @@ on:
 
 jobs:
   pack:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     outputs:
       version: ${{ steps.extract_version.outputs.version }}
       tag: ${{ steps.extract_version.outputs.tag }}
