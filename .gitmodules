@@ -1,0 +1,8 @@
+[submodule "extern/main"]
+	path = extern/main
+	url = https://github.com/shuc1/race-compatibility-skse.git
+	shallow = true
+[submodule "extern/skyui"]
+	path = extern/skyui
+	url = https://github.com/schlangster/skyui.git
+	shallow = true

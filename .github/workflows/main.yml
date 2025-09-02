@@ -1,0 +1,116 @@
+name: Race Compatibility SKSE CI - Auto Release
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  pack:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.extract_version.outputs.version }}
+      tag: ${{ steps.extract_version.outputs.tag }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Extract version
+        id: extract_version
+        run: |
+          . .github/scripts/match-string.ps1
+
+          $content = Get-Content xmake.lua -Raw -Encoding UTF8
+          $version = Match-String -content $content -pattern 'set_version\("([^"]+)"'
+          $tag = "v$version"
+
+          echo "version=$version" >> $env:GITHUB_OUTPUT
+          echo "tag=$tag" >> $env:GITHUB_OUTPUT
+
+          echo "📘 Version: $version"
+
+      - name: Check if tag exists
+        run: |
+          $ErrorActionPreference = "Continue"
+          git fetch --tags 2>$null
+          $tag = "${{ steps.extract_version.outputs.tag }}"
+          git rev-parse $tag -- 2>$null
+          $ErrorActionPreference = "Stop"
+
+          if ($LASTEXITCODE -eq 0) {
+            echo "❌ Tag already exists: $tag"
+            exit 1
+          } else {
+            echo "🏷️ Tag does not exist: $tag"
+            exit 0
+          }
+      
+      - name: Pack
+        run: |
+          xmake pack
+          mkdir -p upload
+          Get-ChildItem -Path build/xpack -Filter '*.zip' -Recurse |
+            Copy-Item -Destination upload/
+          echo "🗃️ Uploaded artifact"
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          path: upload/*.zip
+          if-no-files-found: error
+
+  release:
+    permissions:
+      contents: write
+    needs: pack
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create Git tag
+        run: |
+          tag=${{ needs.pack.outputs.tag }}
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git tag -a "${tag}" HEAD -m "Release ${tag}"
+          git push origin "${tag}" || (echo "Failed to push tag"; exit 1)
+
+      - name: Generate changelog
+        run: |
+          url="https://github.com/${{ github.repository }}"
+          prev_tag=$(git describe --tags --abbrev=0 --match "v*.*.*" $(git rev-list --tags --skip=1 --max-count=1))
+          echo "prev_tag=$prev_tag" >> $GITHUB_OUTPUT
+          {
+            echo "## What's Changed"
+            echo "* release: version ${{ needs.pack.outputs.version }} by @${GITHUB_ACTOR}"
+            echo
+            echo
+            echo "**Full Changelog**: ${url}/compare/${prev_tag}...${{ needs.pack.outputs.tag }}"
+          } > CHANGELOG.md
+
+      - name: Download all ZIP artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifact
+
+      - name: List downloaded files
+        run: |
+          echo "💼 Artifact:"
+          ls -R artifact
+
+      - name: Create GitHub Release and upload assets
+        uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ needs.pack.outputs.tag }}
+          name: ${{ needs.pack.outputs.tag }}
+          body_path: CHANGELOG.md
+          files: artifact/**/*.zip
