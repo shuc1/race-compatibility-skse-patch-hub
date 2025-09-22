@@ -15,7 +15,10 @@ rule("papyrus", function()
     on_load(function(target)
         target:set("kind", "object")
         target:set("default", true)
-        target:add("includedirs", "extern/main/res/scripts/source/", "extern/skyui/dist/Data/Scripts/Headers/")
+        target:add("includedirs", 
+        "extern/main/res/scripts/source/", 
+        "extern/skyui/dist/Data/Scripts/Headers/",
+        "extern/uiextensions/")
     end)
 
     on_buildcmd_files(function(target, batchcmds, sourcebatch, opt)
