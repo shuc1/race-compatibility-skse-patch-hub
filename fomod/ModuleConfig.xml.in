@@ -243,6 +243,30 @@ If you are not going to do that, or if you have other mods that rewrite the same
                             </typeDescriptor>
                         </plugin>
 
+                        <plugin name="Bloodlines of Tamriel v1.1">
+                            <description>Select this if you are using Bloodlines of Tamriel - A Vampire Overhaul</description>
+                            <image path="fomod/images/bloodlines-of-tamriel.jpg" />
+                            <files>
+                                <folder source="script/vampire/bloodlines-of-tamriel"
+                                    destination="./" priority="0" />
+                            </files>
+                            <typeDescriptor>
+                                <dependencyType>
+                                    <defaultType name="Optional" />
+                                    <patterns>
+                                        <pattern>
+                                            <dependencies operator="And">
+                                                <fileDependency
+                                                    file="Bloodlines of Tamriel.esp"
+                                                    state="Active" />
+                                            </dependencies>
+                                            <type name="Recommended" />
+                                        </pattern>
+                                    </patterns>
+                                </dependencyType>
+                            </typeDescriptor>
+                        </plugin>
+
                     </plugins>
                 </group>
 
@@ -307,7 +331,7 @@ If you are not going to do that, or if you have other mods that rewrite the same
 
                 <group name="Miscellaneous" type="SelectAny">
                     <plugins>
-                        <plugin name="Growl v3.2.1">
+                        <plugin name="Growl v3.4">
                             <description>Select this if you are using Growl - Werebeasts of Skyrim</description>
                             <image path="fomod/images/growl.jpg" />
                             <files>

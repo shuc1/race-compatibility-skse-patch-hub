@@ -6,7 +6,7 @@ includes("xmake-rules.lua")
 
 project_name = "Race Compatibility SKSE - Patch Hub"
 
-set_version("2.1.5")
+set_version("2.1.6")
 
 -- build
 for subdir, _ in pairs(get_papyrus_source_subdirs("patch/")) do
