@@ -48,3 +48,7 @@ If you find any issues caused by the patches, please report them here and don't 
         }))
     end)
 end)
+
+-- empty target for config file generation
+target("config")
+    set_kind("phony")

@@ -64,6 +64,7 @@ jobs:
       - name: Pack and Extract Matrix for Publishing
         id: pack
         run: |
+          xmake b config
           $output = xmake pack 2>&1
           $packageList = @()
           foreach ($line in ($output -split '\r?\n')) {
