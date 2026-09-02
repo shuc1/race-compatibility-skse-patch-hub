@@ -331,7 +331,7 @@ If you are not going to do that, or if you have other mods that rewrite the same
 
                 <group name="Miscellaneous" type="SelectAny">
                     <plugins>
-                        <plugin name="Growl v3.4">
+                        <plugin name="Growl v3.7.2">
                             <description>Select this if you are using Growl - Werebeasts of Skyrim</description>
                             <image path="fomod/images/growl.jpg" />
                             <files>

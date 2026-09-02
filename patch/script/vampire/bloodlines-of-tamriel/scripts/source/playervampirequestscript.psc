@@ -442,12 +442,12 @@ EndFunction
 
 Function changePlayerEyes()
   If (BOTVar_CustomAppearance.getValue() == 1 as Float) && PlayerRef.hasKeyword(Vampire)
-    ; RCS 
+    ; RCS
+    ; head part type: Argonian-1 Khajiit-9
     Race PlayerRace = PlayerRef.GetActorBase().GetRace()
-    Int RcsHeadPartType = RaceCompatibility.GetHeadPartTypeByRace(PlayerRace)
-    If PlayerRace == ArgonianRace || RcsHeadPartType == 1
+    If RaceCompatibility.GetIsHeadPartTypeByRace(PlayerRace, 1)
       PlayerRef.SetEyeTexture(SkinEyesMaleArgonianVampire)
-    ElseIf PlayerRace == KhajiitRace || RcsHeadPartType == 11
+    ElseIf RaceCompatibility.GetIsHeadPartTypeByRace(PlayerRace, 9)
       PlayerRef.SetEyeTexture(SkinEyesKhajiitVampire)
     Else
       PlayerRef.SetEyeTexture(EyesMaleHumanVampire)
@@ -698,10 +698,9 @@ Function VampireChangeAppBack()
   If BOTVar_CustomAppearance.getValue() == 1 as Float
     ; RCS 
     Race PlayerCurrentRace = PlayerRef.GetActorBase().GetRace()
-    Int RcsHeadPartType = RaceCompatibility.GetHeadPartTypeByRace(PlayerCurrentRace)
-    If PlayerCurrentRace == ArgonianRace || RcsHeadPartType == 1
+    If RaceCompatibility.GetIsHeadPartTypeByRace(PlayerCurrentRace, 1)
       PlayerRef.SetEyeTexture(SkinEyesMaleArgonian)
-    ElseIf PlayerCurrentRace == KhajiitRace || RcsHeadPartType == 11
+    ElseIf RaceCompatibility.GetIsHeadPartTypeByRace(PlayerCurrentRace, 9)
       PlayerRef.SetEyeTexture(SkinEyesKhajiitBase)
     Else
       PlayerRef.SetEyeTexture(EyesMaleHumanBlue)

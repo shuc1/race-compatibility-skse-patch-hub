@@ -7,16 +7,21 @@ on:
 jobs:
   pack:
     runs-on: windows-latest
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
     outputs:
       version: ${{ steps.extract_version.outputs.version }}
       tag: ${{ steps.extract_version.outputs.tag }}
+      matrix: ${{ steps.pack.outputs.matrix }}
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
+          submodules: recursive
 
       - name: Extract version
         id: extract_version
@@ -48,26 +53,50 @@ jobs:
             exit 0
           }
 
-      - name: Setup xmake
+      - name: Setup Xmake
         uses: xmake-io/github-action-setup-xmake@v1
         with:
           # ref: https://github.com/xmake-io/xmake/blob/dev/.github/workflows/windows.yml
           xmake-version: latest
-          actions-cache-folder: '.xmake-cache'
+          actions-cache-folder: ".xmake-cache"
           actions-cache-key: ${{ runner.os }}
 
-      - name: Pack
+      - name: Pack and Extract Matrix for Publishing
+        id: pack
         run: |
-          xmake pack
-          mkdir -p upload
-          Get-ChildItem -Path build/xpack -Filter '*.zip' -Recurse |
-            Copy-Item -Destination upload/
-          echo "🗃️ Uploaded artifact"
+          $output = xmake pack 2>&1
+          $packageList = @()
+          foreach ($line in ($output -split '\r?\n')) {
+              if ($line -match '\[package\]:\s*(.*)') {
+                  $jsonStr = $matches[1].Trim()
+                  $packageList += ConvertFrom-Json $jsonStr
+              }
+          }
 
-      - name: Upload
-        uses: actions/upload-artifact@v4
+          if ($packageList.Count -eq 0) {
+              Write-Error "❗ No packages found! Aborting workflow."
+              exit 1
+          }
+
+          $matrixObject = @{ include = @($packageList) }
+          $matrixJson = $matrixObject | ConvertTo-Json -Compress
+
+          echo "matrix=$matrixJson" >> $env:GITHUB_OUTPUT
+          echo "🗃️ Packed artifacts"
+          echo "📊 Matrix: $matrixJson"
+
+      - name: Generate Artifact Attestation
+        if: github.event_name == 'push'
+        uses: actions/attest@v4
         with:
-          path: upload/*.zip
+          subject-path: build/xpack/*.zip
+
+      - name: Upload Artifacts
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v7
+        with:
+          name: artifact-${{ steps.extract_version.outputs.version }}
+          path: build/xpack/*.zip
           if-no-files-found: error
 
   release:
@@ -78,7 +107,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -114,7 +143,7 @@ jobs:
           ls -R artifact
 
       - name: Create GitHub Release and upload assets
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -122,3 +151,50 @@ jobs:
           name: ${{ needs.pack.outputs.tag }}
           body_path: CHANGELOG.md
           files: artifact/**/*.zip
+
+  publish:
+    if: github.event_name == 'push'
+    needs:
+      - pack
+      - release
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 1
+      matrix: ${{ fromJson(needs.pack.outputs.matrix) }}
+      fail-fast: false
+    name: publish (${{ matrix.name }})
+
+    steps:
+      - name: Download Asset from Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release download "${{ needs.pack.outputs.tag }}" \
+            --repo "${{ github.repository }}" \
+            --pattern "${{ matrix.filename }}" \
+            --dir ./
+
+      - name: Publish to Nexus Mods
+        id: publish_nexusmods
+        uses: Nexus-Mods/upload-action@v1.0.0-beta.10
+        with:
+          api_key: ${{ secrets.NEXUSMODS_API_KEY }}
+          file_id: ${{ matrix.file_id }}
+          filename: ${{ matrix.filename }}
+          version: ${{ needs.pack.outputs.version }}
+          display_name: ${{ matrix.name }}
+          description: ${{ matrix.description }}
+          category: ${{ matrix.category }}
+          archive_existing_version: true
+          primary_mod_manager_download: ${{ matrix.category == 'main' }}
+          allow_mod_manager_download: true
+          show_requirements_pop_up: ${{ matrix.category == 'main' }}
+          update_mod_version: false
+
+      - name: List Uploaded Files
+        shell: bash
+        run: |
+          echo "✅ Uploaded ${{ matrix.filename }} to Nexus Mods"
+          echo "📑 File UID: ${{ steps.publish_nexusmods.outputs.version_id }}"
+          echo "📂 Group ID: ${{ matrix.file_id }}"
+          echo " SHA256: $(sha256sum "${{ matrix.filename }}" | awk '{print $1}')"

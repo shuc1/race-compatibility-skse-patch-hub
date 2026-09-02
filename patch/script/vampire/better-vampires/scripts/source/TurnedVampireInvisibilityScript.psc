@@ -41,12 +41,11 @@ Event OnEffectFinish(Actor akTarget, Actor akCaster)
 	; 	akTarget.SetEyeTexture(BVEyesMaleHumanVampire)
 	; EndIf
 	; RCS
-	; head part type: Argonian-1 Khajiit-11
+	; head part type: Argonian-1 Khajiit-9
 	Race akTargetRace = akTarget.GetActorBase().GetRace()
-	Int RcsHeadPartType = RaceCompatibility.GetHeadPartTypeByRace(akTargetRace)
-	If akTargetRace == ArgonianRace ||  RcsHeadPartType == 1
+	If RaceCompatibility.GetIsHeadPartTypeByRace(akTargetRace, 1)
 		akTarget.SetEyeTexture(BVSkinEyesMaleArgonianVampire)
-	ElseIf akTargetRace == KhajiitRace || RcsHeadPartType == 11
+	ElseIf RaceCompatibility.GetIsHeadPartTypeByRace(akTargetRace, 9)
 		akTarget.SetEyeTexture(BVSkinEyesKhajiitVampire)
 	Else
 		akTarget.SetEyeTexture(BVEyesMaleHumanVampire)

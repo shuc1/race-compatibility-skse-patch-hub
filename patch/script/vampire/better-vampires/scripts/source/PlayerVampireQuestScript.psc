@@ -3694,12 +3694,11 @@ Function TurnNPCIntoVampire(Actor akFeedTarget)
 			; EndIf
 
 			; RCS
-			; head part type: Argonian-1 Khajiit-11
+			; head part type: Argonian-1 Khajiit-9
 			Race akFeedTargetRace = akFeedTarget.GetActorBase().GetRace()
-			Int RcsHeadPartType = RaceCompatibility.GetHeadPartTypeByRace(akFeedTargetRace)
-			If akFeedTargetRace == ArgonianRace ||  RcsHeadPartType == 1
+			If RaceCompatibility.GetIsHeadPartTypeByRace(akFeedTargetRace, 1)
 				akFeedTarget.SetEyeTexture(SkinEyesMaleArgonianVampire)
-			ElseIf akFeedTargetRace == KhajiitRace || RcsHeadPartType == 11
+			ElseIf RaceCompatibility.GetIsHeadPartTypeByRace(akFeedTargetRace, 9)
 				akFeedTarget.SetEyeTexture(SkinEyesKhajiitVampire)
 			Else
 				akFeedTarget.SetEyeTexture(EyesMaleHumanVampire)
@@ -8487,6 +8486,9 @@ Function VampireCure(Actor Player)
 	Else
 		Debug.Notification("You were not detected as a Vampire race.")
 		Utility.Wait(2.0)
+		If (RaceCompatibility.GetVampireRaceByRace(PlayerREF.GetRace()))
+			Debug.Notification("You were not detected as being a default mortal race either ...")
+		EndIf
 		Debug.Notification("There cannot be a race change.")
 	EndIf
 
@@ -11667,11 +11669,11 @@ Function TurnedNPCRefresh(ReferenceAlias AliasToRefresh)
 				; 	VampTarget.SetEyeTexture(EyesMaleHumanVampire)
 				; EndIf
 				; RCS
+				; head part type: Argonian-1 Khajiit-9
 				Race VampTargetRace = VampTarget.GetActorBase().GetRace()
-				Int RcsHeadPartType = RaceCompatibility.GetHeadPartTypeByRace(VampTargetRace)
-				If VampTargetRace == ArgonianRace ||  RcsHeadPartType == 1
+				If RaceCompatibility.GetIsHeadPartTypeByRace(VampTargetRace, 1)
 					VampTarget.SetEyeTexture(SkinEyesMaleArgonianVampire)
-				ElseIf VampTargetRace == KhajiitRace || RcsHeadPartType == 11
+				ElseIf RaceCompatibility.GetIsHeadPartTypeByRace(VampTargetRace, 9)
 					VampTarget.SetEyeTexture(SkinEyesKhajiitVampire)
 				Else
 					VampTarget.SetEyeTexture(EyesMaleHumanVampire)
