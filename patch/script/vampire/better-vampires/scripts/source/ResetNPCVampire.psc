@@ -365,9 +365,10 @@ EVENT OnEffectStart(Actor akFeedTarget, Actor akCaster)
 
 			If VampireVictimAppearance.GetValue() == 0
 
-				If (akFeedTarget.GetActorBase().GetRace() == ArgonianRace)
+				; RCS
+				If RaceCompatibility.GetIsHeadPartTypeByRace(akFeedTarget.GetActorBase().GetRace(), 1)
 					akFeedTarget.SetEyeTexture(SkinEyesMaleArgonian)
-				ElseIf (akFeedTarget.GetActorBase().GetRace() == KhajiitRace)
+				ElseIf RaceCompatibility.GetIsHeadPartTypeByRace(akFeedTarget.GetActorBase().GetRace(), 9)
 					akFeedTarget.SetEyeTexture(SkinEyesKhajiitBase)
 				Else
 					akFeedTarget.SetEyeTexture(EyesMaleHumanBrown)

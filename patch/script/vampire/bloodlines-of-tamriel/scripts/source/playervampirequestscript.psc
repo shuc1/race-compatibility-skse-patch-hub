@@ -580,25 +580,25 @@ Function GetPlayerRace()
   ; ElseIf PlayerRef.GetActorBase().GetRace() == WoodElfRace || PlayerRef.GetActorBase().GetRace() == WoodElfRaceVampire
   ;   BOTVar_PlayerRace.setValue(10 as Float)
   Race PlayerRace = PlayerRef.GetActorBase().GetRace()
-  If RaceCompatibility.GetIsRaceByProxy(ArgonianRace, PlayerRace) || RaceCompatibility.GetIsRaceByProxy(ArgonianRaceVampire, PlayerRace)
+  If RaceCompatibility.GetIsRaceByProxy(PlayerRace, ArgonianRace) || RaceCompatibility.GetIsRaceByProxy(PlayerRace, ArgonianRaceVampire)
     BOTVar_PlayerRace.setValue(1 as Float)
-  ElseIf RaceCompatibility.GetIsRaceByProxy(BretonRace, PlayerRace) || RaceCompatibility.GetIsRaceByProxy(BretonRaceVampire, PlayerRace)
+  ElseIf RaceCompatibility.GetIsRaceByProxy(PlayerRace, BretonRace) || RaceCompatibility.GetIsRaceByProxy(PlayerRace, BretonRaceVampire)
     BOTVar_PlayerRace.setValue(2 as Float)
-  ElseIf RaceCompatibility.GetIsRaceByProxy(DarkElfRace, PlayerRace) || RaceCompatibility.GetIsRaceByProxy(DarkElfRaceVampire, PlayerRace)
+  ElseIf RaceCompatibility.GetIsRaceByProxy(PlayerRace, DarkElfRace) || RaceCompatibility.GetIsRaceByProxy(PlayerRace, DarkElfRaceVampire)
     BOTVar_PlayerRace.setValue(3 as Float)
-  ElseIf RaceCompatibility.GetIsRaceByProxy(HighElfRace, PlayerRace) || RaceCompatibility.GetIsRaceByProxy(HighElfRaceVampire, PlayerRace)
+  ElseIf RaceCompatibility.GetIsRaceByProxy(PlayerRace, HighElfRace) || RaceCompatibility.GetIsRaceByProxy(PlayerRace, HighElfRaceVampire)
     BOTVar_PlayerRace.setValue(4 as Float)
-  ElseIf RaceCompatibility.GetIsRaceByProxy(ImperialRace, PlayerRace) || RaceCompatibility.GetIsRaceByProxy(ImperialRaceVampire, PlayerRace)
+  ElseIf RaceCompatibility.GetIsRaceByProxy(PlayerRace, ImperialRace) || RaceCompatibility.GetIsRaceByProxy(PlayerRace, ImperialRaceVampire)
     BOTVar_PlayerRace.setValue(5 as Float)
-  ElseIf RaceCompatibility.GetIsRaceByProxy(KhajiitRace, PlayerRace) || RaceCompatibility.GetIsRaceByProxy(KhajiitRaceVampire, PlayerRace)
+  ElseIf RaceCompatibility.GetIsRaceByProxy(PlayerRace, KhajiitRace) || RaceCompatibility.GetIsRaceByProxy(PlayerRace, KhajiitRaceVampire)
     BOTVar_PlayerRace.setValue(6 as Float)
-  ElseIf RaceCompatibility.GetIsRaceByProxy(NordRace, PlayerRace) || RaceCompatibility.GetIsRaceByProxy(NordRaceVampire, PlayerRace)
+  ElseIf RaceCompatibility.GetIsRaceByProxy(PlayerRace, NordRace) || RaceCompatibility.GetIsRaceByProxy(PlayerRace, NordRaceVampire)
     BOTVar_PlayerRace.setValue(7 as Float)
-  ElseIf RaceCompatibility.GetIsRaceByProxy(OrcRace, PlayerRace) || RaceCompatibility.GetIsRaceByProxy(OrcRaceVampire, PlayerRace)
+  ElseIf RaceCompatibility.GetIsRaceByProxy(PlayerRace, OrcRace) || RaceCompatibility.GetIsRaceByProxy(PlayerRace, OrcRaceVampire)
     BOTVar_PlayerRace.setValue(8 as Float)
-  ElseIf RaceCompatibility.GetIsRaceByProxy(RedguardRace, PlayerRace) || RaceCompatibility.GetIsRaceByProxy(RedguardRaceVampire, PlayerRace)
+  ElseIf RaceCompatibility.GetIsRaceByProxy(PlayerRace, RedguardRace) || RaceCompatibility.GetIsRaceByProxy(PlayerRace, RedguardRaceVampire)
     BOTVar_PlayerRace.setValue(9 as Float)
-  ElseIf RaceCompatibility.GetIsRaceByProxy(WoodElfRace, PlayerRace) || RaceCompatibility.GetIsRaceByProxy(WoodElfRaceVampire, PlayerRace)
+  ElseIf RaceCompatibility.GetIsRaceByProxy(PlayerRace, WoodElfRace) || RaceCompatibility.GetIsRaceByProxy(PlayerRace, WoodElfRaceVampire)
     BOTVar_PlayerRace.setValue(10 as Float)
   Else
     Self.CustomRaceMenu(0, True)
@@ -791,7 +791,7 @@ Function VampireLoseBloodLevel(Float BloodPoints, Int Multiplier)
   ; RCS
   ; If PlayerRef.GetRace() == NordRaceVampire || PlayerRef.GetRace() == NordRace
   Race PlayerRace = PlayerRef.GetActorBase().GetRace()
-  If RaceCompatibility.GetIsRaceByProxy(NordRaceVampire, PlayerRace) || RaceCompatibility.GetIsRaceByProxy(NordRace, PlayerRace)
+  If RaceCompatibility.GetIsRaceByProxy(PlayerRace, NordRaceVampire) || RaceCompatibility.GetIsRaceByProxy(PlayerRace, NordRace)
     BloodPoints *= 0.75 as Float
     If BOTVar_RacialNord_Status.getValue() != 0 as Float
       BloodPoints *= 0 as Float
@@ -1438,7 +1438,7 @@ Int Function GetRcsProxyRaceID(Race akRace, Race[] akRaceArray)
   Int i = 0
 	Int len = akRaceArray.Length
 	While i < len
-		If RaceCompatibility.GetIsRaceByProxy(akRaceArray[i], akRace)
+		If RaceCompatibility.GetIsRaceByProxy(akRace, akRaceArray[i])
 			Return i
 		EndIf
 		i += 1

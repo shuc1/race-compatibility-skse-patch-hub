@@ -387,10 +387,11 @@ Event OnEffectStart(Actor VampTargetActor, Actor Caster)
 
 			If VampireVictimAppearance.GetValue() == 0
 
-				If (VampTarget.GetActorBase().GetRace() == ArgonianRace)
+				; RCS
+				If RaceCompatibility.GetIsHeadPartTypeByRace(VampTarget.GetActorBase().GetRace(), 1)
 					;VampTarget.SetEyeTexture(BVSkinEyesMaleArgonianVampire)
 					VampTarget.SetEyeTexture(SkinEyesMaleArgonianVampire)
-				ElseIf (VampTarget.GetActorBase().GetRace() == KhajiitRace)
+				ElseIf RaceCompatibility.GetIsHeadPartTypeByRace(VampTarget.GetActorBase().GetRace(), 9)
 					;VampTarget.SetEyeTexture(BVSkinEyesKhajiitVampire)
 					VampTarget.SetEyeTexture(SkinEyesKhajiitVampire)
 				Else
@@ -557,10 +558,11 @@ Event OnUpdateGameTime()
 
 		If VampireVictimAppearance.GetValue() == 0
 
-			If (VampTarget.GetActorBase().GetRace() == ArgonianRace)
+			; RCS
+			If RaceCompatibility.GetIsHeadPartTypeByRace(VampTarget.GetActorBase().GetRace(), 1)
 				;VampTarget.SetEyeTexture(BVSkinEyesMaleArgonianVampire)
 				VampTarget.SetEyeTexture(SkinEyesMaleArgonianVampire)
-			ElseIf (VampTarget.GetActorBase().GetRace() == KhajiitRace)
+			ElseIf RaceCompatibility.GetIsHeadPartTypeByRace(VampTarget.GetActorBase().GetRace(), 9)
 				;VampTarget.SetEyeTexture(BVSkinEyesKhajiitVampire)
 				VampTarget.SetEyeTexture(SkinEyesKhajiitVampire)
 			Else
@@ -716,10 +718,11 @@ Event OnLoad()
 
 		If VampireVictimAppearance.GetValue() == 0
 
-			If (VampTarget.GetActorBase().GetRace() == ArgonianRace)
+			; RCS
+			If RaceCompatibility.GetIsHeadPartTypeByRace(VampTarget.GetActorBase().GetRace(), 1)
 				;VampTarget.SetEyeTexture(BVSkinEyesMaleArgonianVampire)
 				VampTarget.SetEyeTexture(SkinEyesMaleArgonianVampire)
-			ElseIf (VampTarget.GetActorBase().GetRace() == KhajiitRace)
+			ElseIf RaceCompatibility.GetIsHeadPartTypeByRace(VampTarget.GetActorBase().GetRace(), 9)
 				;VampTarget.SetEyeTexture(BVSkinEyesKhajiitVampire)
 				VampTarget.SetEyeTexture(SkinEyesKhajiitVampire)
 			Else
@@ -1120,9 +1123,10 @@ Event OnEffectFinish(Actor VampTargetActor, Actor Caster)
 
 		UnRegisterForUpdateGameTime()
 
-		If (VampTarget.GetActorBase().GetRace() == ArgonianRace)
+		; RCS
+		If RaceCompatibility.GetIsHeadPartTypeByRace(VampTarget.GetActorBase().GetRace(), 1)
 			VampTarget.SetEyeTexture(SkinEyesMaleArgonian)
-		ElseIf (VampTarget.GetActorBase().GetRace() == KhajiitRace)
+		ElseIf RaceCompatibility.GetIsHeadPartTypeByRace(VampTarget.GetActorBase().GetRace(), 9)
 			VampTarget.SetEyeTexture(SkinEyesKhajiitBase)
 		Else
 			VampTarget.SetEyeTexture(EyesMaleHumanBrown)

@@ -42,7 +42,7 @@ xpack("release", function()
             description = [[
 Please check the description page for details.
 
-Update patches for Bloodlines of Tamriel v1.1 and Better Vampires v9.1.
+Update the patch for Sacrilege v2.2.2 and improve race compatibility for Sacrosanct v6.0.0, Better Vampires v9.1, Bloodlines of Tamriel v1.1, and Imperious v7.28.0.
 
 If you find any issues caused by the patches, please report them here and don't bother the mod authors. Thanks!]],
         }))

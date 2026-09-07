@@ -25,7 +25,7 @@ Race[] Property RRR_Race Auto
 Int Function GetRaceIDByProxy(Race akRace)
   Int i = RRR_Race.Length - 1
   While i >= 0
-    If RaceCompatibility.GetIsRaceByProxy(RRR_Race[i], akRace)
+    If RaceCompatibility.GetIsRaceByProxy(akRace, RRR_Race[i])
       Return i
     EndIf
     i -= 1

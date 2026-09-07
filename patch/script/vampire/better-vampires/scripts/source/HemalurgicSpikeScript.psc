@@ -102,7 +102,7 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 	If ChanceToAbsorb >=85
 		; RCS
 		Race akTargetRace = akTarget.GetRace()
-		If RaceCompatibility.GetIsRaceByProxy(ArgonianRace, akTargetRace) && akTarget.GetAV("Variable03") != 666
+		If RaceCompatibility.GetIsRaceByProxy(akTargetRace, ArgonianRace) && akTarget.GetAV("Variable03") != 666
 			akCaster.DispelSpell(HemalurgicArgonian)
 			akCaster.DispelSpell(HemalurgicBreton)
 			akCaster.DispelSpell(HemalurgicDarkElf)
@@ -128,7 +128,7 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 			HemalurgicStagger.Cast(akTarget,akTarget)
 			HemalurgicArgonian.Cast(akCaster,akCaster)
 			;-----------------------------
-		ElseIf RaceCompatibility.GetIsRaceByProxy(BretonRace, akTargetRace) && akTarget.GetAV("Variable03") != 666
+		ElseIf RaceCompatibility.GetIsRaceByProxy(akTargetRace, BretonRace) && akTarget.GetAV("Variable03") != 666
 			akCaster.DispelSpell(HemalurgicArgonian)
 			akCaster.DispelSpell(HemalurgicBreton)
 			akCaster.DispelSpell(HemalurgicDarkElf)
@@ -154,7 +154,7 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 			HemalurgicStagger.Cast(akTarget,akTarget)
 			HemalurgicBreton.Cast(akCaster,akCaster)
 			;-----------------------------
-		ElseIf RaceCompatibility.GetIsRaceByProxy(DarkElfRace, akTargetRace) && akTarget.GetAV("Variable03") != 666
+		ElseIf RaceCompatibility.GetIsRaceByProxy(akTargetRace, DarkElfRace) && akTarget.GetAV("Variable03") != 666
 			akCaster.DispelSpell(HemalurgicArgonian)
 			akCaster.DispelSpell(HemalurgicBreton)
 			akCaster.DispelSpell(HemalurgicDarkElf)
@@ -180,7 +180,7 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 			HemalurgicStagger.Cast(akTarget,akTarget)
 			HemalurgicDarkElf.Cast(akCaster,akCaster)
 			;-----------------------------
-		ElseIf RaceCompatibility.GetIsRaceByProxy(ElderRace, akTargetRace) && akTarget.GetAV("Variable03") != 666
+		ElseIf RaceCompatibility.GetIsRaceByProxy(akTargetRace, ElderRace) && akTarget.GetAV("Variable03") != 666
 			akCaster.DispelSpell(HemalurgicArgonian)
 			akCaster.DispelSpell(HemalurgicBreton)
 			akCaster.DispelSpell(HemalurgicDarkElf)
@@ -206,7 +206,7 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 			HemalurgicStagger.Cast(akTarget,akTarget)
 			HemalurgicElder.Cast(akCaster,akCaster)
 			;-----------------------------
-		ElseIf RaceCompatibility.GetIsRaceByProxy(HighElfRace, akTargetRace) && akTarget.GetAV("Variable03") != 666
+		ElseIf RaceCompatibility.GetIsRaceByProxy(akTargetRace, HighElfRace) && akTarget.GetAV("Variable03") != 666
 			akCaster.DispelSpell(HemalurgicArgonian)
 			akCaster.DispelSpell(HemalurgicBreton)
 			akCaster.DispelSpell(HemalurgicDarkElf)
@@ -233,7 +233,7 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 			HemalurgicStagger.Cast(akTarget,akTarget)
 			HemalurgicHighElf.Cast(akCaster,akCaster)
 			;-----------------------------
-		ElseIf RaceCompatibility.GetIsRaceByProxy(ImperialRace, akTargetRace) && akTarget.GetAV("Variable03") != 666
+		ElseIf RaceCompatibility.GetIsRaceByProxy(akTargetRace, ImperialRace) && akTarget.GetAV("Variable03") != 666
 			akCaster.DispelSpell(HemalurgicArgonian)
 			akCaster.DispelSpell(HemalurgicBreton)
 			akCaster.DispelSpell(HemalurgicDarkElf)
@@ -259,7 +259,7 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 			HemalurgicStagger.Cast(akTarget,akTarget)
 			HemalurgicImperial.Cast(akCaster,akCaster)
 			;-----------------------------
-		ElseIf RaceCompatibility.GetIsRaceByProxy(KhajiitRace, akTargetRace) && akTarget.GetAV("Variable03") != 666
+		ElseIf RaceCompatibility.GetIsRaceByProxy(akTargetRace, KhajiitRace) && akTarget.GetAV("Variable03") != 666
 			akCaster.DispelSpell(HemalurgicArgonian)
 			akCaster.DispelSpell(HemalurgicBreton)
 			akCaster.DispelSpell(HemalurgicDarkElf)
@@ -286,7 +286,7 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 			HemalurgicStagger.Cast(akTarget,akTarget)
 			HemalurgicKhajiit.Cast(akCaster,akCaster)
 			;-----------------------------
-		ElseIf RaceCompatibility.GetIsRaceByProxy(NordRace, akTargetRace) && akTarget.GetAV("Variable03") != 666
+		ElseIf RaceCompatibility.GetIsRaceByProxy(akTargetRace, NordRace) && akTarget.GetAV("Variable03") != 666
 			akCaster.DispelSpell(HemalurgicArgonian)
 			akCaster.DispelSpell(HemalurgicBreton)
 			akCaster.DispelSpell(HemalurgicDarkElf)
@@ -330,7 +330,7 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 				EndIf
 			EndIf
 			;-----------------------------
-		ElseIf RaceCompatibility.GetIsRaceByProxy(OrcRace, akTargetRace) && akTarget.GetAV("Variable03") != 666
+		ElseIf RaceCompatibility.GetIsRaceByProxy(akTargetRace, OrcRace) && akTarget.GetAV("Variable03") != 666
 			akCaster.DispelSpell(HemalurgicArgonian)
 			akCaster.DispelSpell(HemalurgicBreton)
 			akCaster.DispelSpell(HemalurgicDarkElf)
@@ -357,7 +357,7 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 			HemalurgicStagger.Cast(akTarget,akTarget)
 			HemalurgicOrc.Cast(akCaster,akCaster)
 			;-----------------------------
-		ElseIf akTarget.GetRace() == RedguardRace  && akTarget.GetAV("Variable03") != 666
+		ElseIf RaceCompatibility.GetIsRaceByProxy(akTargetRace, RedguardRace) && akTarget.GetAV("Variable03") != 666
 			akCaster.DispelSpell(HemalurgicArgonian)
 			akCaster.DispelSpell(HemalurgicBreton)
 			akCaster.DispelSpell(HemalurgicDarkElf)
@@ -409,7 +409,7 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 			HemalurgicStagger.Cast(akTarget,akTarget)
 			HemalurgicFox.Cast(akCaster,akCaster)
 			;-----------------------------
-		ElseIf RaceCompatibility.GetIsRaceByProxy(WoodElfRace, akTargetRace) && akTarget.GetAV("Variable03") != 666
+		ElseIf RaceCompatibility.GetIsRaceByProxy(akTargetRace, WoodElfRace) && akTarget.GetAV("Variable03") != 666
 			akCaster.DispelSpell(HemalurgicArgonian)
 			akCaster.DispelSpell(HemalurgicBreton)
 			akCaster.DispelSpell(HemalurgicDarkElf)

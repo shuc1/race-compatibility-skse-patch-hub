@@ -8480,15 +8480,12 @@ Function VampireCure(Actor Player)
 	; 	;endif
 	; endif
 	; RCS
-	Race PlayerRaceMotal = RaceCompatibility.GetRaceByVampireRace(PlayerREF.GetRace())
-	If PlayerRaceMotal != None
-		PlayerREF.SetRace(PlayerRaceMotal)
-	Else
-		Debug.Notification("You were not detected as a Vampire race.")
+	Race PlayerRaceMortal = RaceCompatibility.GetRaceByVampireRace(PlayerREF.GetRace())
+	If PlayerRaceMortal != None
+		PlayerREF.SetRace(PlayerRaceMortal)
+	ElseIf RaceCompatibility.GetVampireRaceByRace(PlayerREF.GetRace()) == None
+		Debug.Notification("You were not detected as a mortal or Vampire race.")
 		Utility.Wait(2.0)
-		If (RaceCompatibility.GetVampireRaceByRace(PlayerREF.GetRace()))
-			Debug.Notification("You were not detected as being a default mortal race either ...")
-		EndIf
 		Debug.Notification("There cannot be a race change.")
 	EndIf
 

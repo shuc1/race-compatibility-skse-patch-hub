@@ -31,7 +31,7 @@ FormList Property RRR_Remove_FormList_Imperious Auto
 Int Function GetWhichRaceByProxy(Race akRace)
   Int i = RRR_Add_Race.Length - 1
   While i >= 0
-    If RaceCompatibility.GetIsRaceByProxy(RRR_Add_Race[i], akRace)
+    If RaceCompatibility.GetIsRaceByProxy(akRace, RRR_Add_Race[i])
       Return i
     EndIf
     i -= 1

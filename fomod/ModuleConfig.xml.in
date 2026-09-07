@@ -171,7 +171,7 @@ If you are not going to do that, or if you have other mods that rewrite the same
                             </typeDescriptor>
                         </plugin>
 
-                        <plugin name="Sacrilege v2.1.0">
+                        <plugin name="Sacrilege v2.2.2">
                             <description>Select this if you are using Sacrilege - Minimalistic Vampires of Skyrim</description>
                             <image path="fomod/images/sacrilege.jpg" />
                             <files>

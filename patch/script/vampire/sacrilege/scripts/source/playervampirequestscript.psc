@@ -1,10 +1,10 @@
 ;/ Decompiled by Champollion v1.3.2
 PEX format v3.2 GameID: 1
 Source   : PlayerVampireQuestScript.psc
-Modified : 2021-05-02 19:06:38
-Compiled : 2021-05-02 19:06:39
+Modified : 2026-06-24 02:18:52
+Compiled : 2026-06-24 02:18:53
 User     : maxim
-Computer : CANOPUS
+Computer : BRICK
 /;
 ScriptName PlayerVampireQuestScript Extends Quest conditional
 
@@ -22,6 +22,7 @@ Spell Property DLC1VampireChange Auto
 MagicEffect Property DLC1VampireChangeEffect Auto
 MagicEffect Property DLC1VampireChangeFXEffect Auto
 FormList Property DLC1VampireHateFactions Auto
+Quest Property DLC1VampireLordTrackingQuest Auto
 Spell Property DiseasePorphyricHemophelia Auto
 Float Property FeedTimer Auto
 GlobalVariable Property GameDaysPassed Auto
@@ -52,6 +53,11 @@ Message Property SQL_Mechanics_Message_VampireProgressionStage2 Auto
 Message Property SQL_Mechanics_Message_VampireProgressionStage3 Auto
 Message Property SQL_Mechanics_Message_VampireProgressionStage4 Auto
 Spell Property SQL_Mechanics_Spell_HiddenVampireAbilities_Ab Auto
+Spell Property SQL_Mortal_Spell_Age_Ab_Age1_Description Auto
+Spell Property SQL_Mortal_Spell_Age_Ab_Age2_Description Auto
+Spell Property SQL_Mortal_Spell_Age_Ab_Age3_Description Auto
+Spell Property SQL_Mortal_Spell_Age_Ab_Age4_Description Auto
+Spell Property SQL_Mortal_Spell_Age_Ab_Age5_Description Auto
 Spell Property SQL_Mortal_Spell_Bad_Forsaken_Ab Auto
 Spell Property SQL_Mortal_Spell_Bad_MockeryOfLife_Ab Auto
 Spell Property SQL_Mortal_Spell_Good_Dominate_Ab Auto
@@ -114,18 +120,6 @@ Static Property XMarker Auto
 
 ; Skipped compiler generated GotoState
 
-Spell Function GetCurrentSpell()
-  Return CurrentSpell
-EndFunction
-
-Spell Function SetCurrentSpell(Spell akSpell)
-  CurrentSpell = akSpell
-EndFunction
-
-Int Function TestIntegrity()
-  Return 777
-EndFunction
-
 Event OnUpdateGameTime()
   Self.SetAgeVariables()
   FeedTimer = GameDaysPassed.value - LastFeedTime
@@ -143,6 +137,133 @@ Event OnUpdateGameTime()
     Self.AdvanceAge(Player, 1 as Float)
   EndIf
 EndEvent
+
+Spell Function SetCurrentSpell(Spell akSpell)
+  CurrentSpell = akSpell
+EndFunction
+
+Function AdvanceAge(Actor akPlayer, Float afAgeAmount)
+  If CurrentAge < 5
+    SQL_Mechanics_Global_Age.Mod(afAgeAmount)
+    If SQL_Mechanics_Global_Age.GetValue() >= SQL_Mechanics_Global_Age_Threshold.GetValue()
+      CurrentAge += 1
+      If CurrentAge == 1
+        SQL_Age_Message_AgeTo2.Show(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+        Self.SetAgeVariables()
+        Self.SetAgeAb()
+      ElseIf CurrentAge == 2
+        SQL_Age_Message_AgeTo3.Show(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+        Self.SetAgeVariables()
+        Self.SetAgeAb()
+      ElseIf CurrentAge == 3
+        SQL_Age_Message_AgeTo4.Show(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+        Self.SetAgeVariables()
+        Self.SetAgeAb()
+      ElseIf CurrentAge == 4
+        SQL_Age_Message_AgeTo5.Show(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+        Self.SetAgeVariables()
+        Self.SetAgeAb()
+      ElseIf CurrentAge == 5
+        SQL_Age_Message_AgeTo6.Show(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+        Self.SetAgeVariables()
+        Self.SetAgeAb()
+      EndIf
+      If CurrentAge < 5
+        SQL_Mechanics_Global_Age.SetValue(0 as Float)
+        SQL_Mechanics_Global_Age_Threshold.Mod(SQL_Mechanics_Global_Age_Threshold.GetValue() + SQL_Mechanics_Global_Age_Threshold_Add.GetValue())
+      Else
+        SQL_Mechanics_Global_Age.SetValue(SQL_Mechanics_Global_Age_Threshold.GetValue())
+      EndIf
+    EndIf
+  EndIf
+EndFunction
+
+Function AddVampireSpells(Actor akPlayer)
+  Player.AddSpell(SQL_Mortal_Spell_VampiricDrain_Stage1, False)
+  Player.AddSpell(SQL_Mortal_Spell_Power_VampiresSight, False)
+  Player.AddSpell(SQL_Mortal_Spell_Power_VampiresSeduction, False)
+  Player.AddSpell(SQL_Mortal_Spell_Bad_Forsaken_Ab, False)
+  Player.AddSpell(SQL_Mortal_Spell_Bad_MockeryOfLife_Ab, False)
+  Player.AddSpell(SQL_Mortal_Spell_Good_Dominate_Ab, False)
+  Player.AddSpell(SQL_Mortal_Spell_Good_FierceHunger_Ab, False)
+  Player.AddSpell(SQL_Mortal_Spell_Good_StillHeart_Ab, False)
+  Player.AddSpell(SQL_Mortal_Spell_Good_UnderTheIce_Ab, False)
+  Player.AddSpell(SQL_Mechanics_Spell_HiddenVampireAbilities_Ab, False)
+  Player.AddSpell(SQL_Mortal_Spell_Good_NightstalkersStrength_Ab, False)
+EndFunction
+
+Function VampireCure(Actor akPlayer)
+  Game.IncrementStat("Vampirism Cures", 1)
+  Self.UnregisterforUpdateGameTime()
+  VampireStatus = 0
+  Self.StopHate(Player, True)
+  Player.RemoveSpell(SQL_Mortal_Spell_ResistFrost_Ab_Stage1)
+  Player.RemoveSpell(SQL_Mortal_Spell_ResistFrost_Ab_Stage2)
+  Player.RemoveSpell(SQL_Mortal_Spell_ResistFrost_Ab_Stage3)
+  Player.RemoveSpell(SQL_Mortal_Spell_ResistFrost_Ab_Stage4)
+  Player.RemoveSpell(SQL_Mortal_Spell_WeaknessToFire_Ab_Stage1)
+  Player.RemoveSpell(SQL_Mortal_Spell_WeaknessToFire_Ab_Stage2)
+  Player.RemoveSpell(SQL_Mortal_Spell_WeaknessToFire_Ab_Stage3)
+  Player.RemoveSpell(SQL_Mortal_Spell_WeaknessToFire_Ab_Stage4)
+  Player.RemoveSpell(SQL_Mortal_Spell_SunDamage_Ab_Stage1)
+  Player.RemoveSpell(SQL_Mortal_Spell_SunDamage_Ab_Stage2)
+  Player.RemoveSpell(SQL_Mortal_Spell_SunDamage_Ab_Stage3)
+  Player.RemoveSpell(SQL_Mortal_Spell_SunDamage_Ab_Stage4)
+  Player.RemoveSpell(SQL_Stages_Spell_Stage2_Power)
+  Player.RemoveSpell(SQL_Stages_Spell_Stage3_Power)
+  Player.RemoveSpell(SQL_Stages_Spell_Stage4_Power)
+  Player.RemoveSpell(SQL_Scaling_Spell_Stage1_Ab)
+  Player.RemoveSpell(SQL_Scaling_Spell_Stage2_Ab)
+  Player.RemoveSpell(SQL_Scaling_Spell_Stage3_Ab)
+  Player.RemoveSpell(SQL_Scaling_Spell_Stage4_Ab)
+  Player.RemoveSpell(SQL_Mortal_Spell_VampiricDrain_Stage1)
+  Player.RemoveSpell(SQL_Mortal_Spell_VampiricDrain_Stage2_Deprecated)
+  Player.RemoveSpell(SQL_Mortal_Spell_VampiricDrain_Stage3_Deprecated)
+  Player.RemoveSpell(SQL_Mortal_Spell_VampiricDrain_Stage4_Deprecated)
+  Player.RemoveSpell(SQL_Mortal_Spell_Power_VampiresSight)
+  Player.RemoveSpell(SQL_Mortal_Spell_Power_VampiresSeduction)
+  Player.RemoveSpell(SQL_Mortal_Spell_Bad_Forsaken_Ab)
+  Player.RemoveSpell(SQL_Mortal_Spell_Bad_MockeryOfLife_Ab)
+  Player.RemoveSpell(SQL_Mortal_Spell_Good_Dominate_Ab)
+  Player.RemoveSpell(SQL_Mortal_Spell_Good_FierceHunger_Ab)
+  Player.RemoveSpell(SQL_Mortal_Spell_Good_StillHeart_Ab)
+  Player.RemoveSpell(SQL_Mortal_Spell_Good_UnderTheIce_Ab)
+  Player.RemoveSpell(SQL_Mortal_Spell_Good_NightstalkersStrength_Ab)
+  CurrentAge = 0
+  Player.SetActorValue(SQL_ActorValue, 0.0)
+  Player.SetActorValue(SQL_ActorValueNegative, 0.25)
+  SQL_Mechanics_Global_Age_Threshold.SetValue(SQL_Mechanics_Global_Age_Threshold_Base.GetValue())
+  SQL_Ranks_Global_Positive_105.SetValue(5 as Float)
+  SQL_Ranks_Global_Positive_110.SetValue(10 as Float)
+  SQL_Ranks_Global_Negative_025.SetValue(75 as Float)
+  SQL_Stages_Global_Dominate_IllusionBonus.SetValue(15 as Float)
+  If CurrentSpell
+    Player.RemoveSpell(CurrentSpell)
+    CurrentSpell = None
+  EndIf
+  Player.RemoveSpell(SQL_Mechanics_Spell_HiddenVampireAbilities_Ab)
+  If !CureRace
+    ; RCS: recover the configured mortal race, defaulting to Nord only when unmanaged.
+    Race MortalRace = RaceCompatibility.GetRaceByVampireRace(Player.GetRace())
+    If MortalRace != None
+      Player.SetRace(MortalRace)
+    Else
+      Player.SetRace(NordRace)
+    EndIf
+  Else
+    Player.SetRace(CureRace)
+  EndIf
+  Player.RemoveSpell(RacialSpell)
+  PlayerIsVampire.SetValue(0 as Float)
+  Player.DispelSpell(SQL_Mortal_Spell_Power_VampiresSight)
+  Player.RemoveSpell(SQL_Mortal_Spell_Power_VampiresSight)
+  Player.SendVampirismStateChanged(False)
+  Player.RemoveSpell(SQL_Mortal_Spell_Age_Ab_Age1_Description)
+  Player.RemoveSpell(SQL_Mortal_Spell_Age_Ab_Age2_Description)
+  Player.RemoveSpell(SQL_Mortal_Spell_Age_Ab_Age3_Description)
+  Player.RemoveSpell(SQL_Mortal_Spell_Age_Ab_Age4_Description)
+  Player.RemoveSpell(SQL_Mortal_Spell_Age_Ab_Age5_Description)
+EndFunction
 
 Bool Function Devolve(Bool abForceDevolve)
   Float RacialThresholdMult = 1.0
@@ -173,96 +294,6 @@ Bool Function Devolve(Bool abForceDevolve)
     Self.VampireProgression(Player, 2)
     FeedTimer == (1 as Float * RacialThresholdMult)
   EndIf
-EndFunction
-
-Function VampireFeedBed()
-  Game.GetPlayer().PlayIdle(VampireFeedingBedRight)
-EndFunction
-
-Function VampireFeedBedRoll()
-  Game.GetPlayer().PlayIdle(VampireFeedingBedrollRight)
-EndFunction
-
-Function VampireChange(Actor Target)
-  Game.DisablePlayerControls(True, True, False, False, False, True, True, False, 0)
-  VampireChangeFX.play(Target as ObjectReference, -1.0)
-  VampireTransformIncreaseISMD.applyCrossFade(2.0)
-  ObjectReference myXmarker = Target.PlaceAtMe(XMarker as Form, 1, False, False)
-  MagVampireTransform01.play(myXmarker)
-  myXmarker.Disable(False)
-  Utility.Wait(2.0)
-  ImageSpaceModifier.removeCrossFade(1.0)
-  VampireChangeFX.stop(Target as ObjectReference)
-  Race PlayerRace = Target.GetActorBase().GetRace()
-  CureRace = PlayerRace
-  ; Int RaceID = SQL_Races.Find(PlayerRace as Form)
-  ; If RaceID >= 0
-  ;   RacialSpell = SQL_Racial.GetAt(RaceID) as Spell
-  ;   Target.SetRace(SQL_RacesVampire.GetAt(RaceID) as Race)
-  ;   Target.AddSpell(RacialSpell, False)
-  ; Else
-  ;   SQL_Mechanics_Message_RaceBroken.Show(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
-  ;   Target.SetRace(NordRaceVampire)
-  ; EndIf
-
-  ; RCS
-  Race VampireRace = RaceCompatibility.GetVampireRaceByRace(PlayerRace)
-  If VampireRace != None
-    Target.SetRace(VampireRace)
-    ; To assign racial abilities
-    Int RaceID = 0
-    Int Size = SQL_Races.GetSize()
-    While (RaceID < Size)
-      If RaceCompatibility.GetIsRaceByProxy(PlayerRace, SQL_Races.GetAt(RaceID) As Race)
-        RacialSpell = SQL_Racial.GetAt(RaceID) as Spell
-        Target.AddSpell(RacialSpell, False)
-        ; equivalence for break
-        RaceID = Size
-      Else
-        RaceID += 1
-      EndIf
-    EndWhile
-  Else
-    SQL_Mechanics_Message_RaceBroken.Show(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
-    Target.SetRace(NordRaceVampire)
-  EndIf
-
-  VampireCureDisease.Cast(Target as ObjectReference, None)
-  VampireStatus = 1
-  Self.VampireProgression(Player, 1)
-  Self.AddVampireSpells(Player)
-  Self.RegisterForUpdateGameTime(1.0)
-  LastFeedTime = GameDaysPassed.value
-  PlayerIsVampire.SetValue(1 as Float)
-  Utility.Wait(1.0)
-  Game.EnablePlayerControls(True, True, True, True, True, True, True, True, 0)
-  If VC01.GetStageDone(200) == 1 as Bool
-    VC01.SetStage(25)
-  EndIf
-  CurrentAge = 0
-  Player.SetActorValue(SQL_ActorValue, 0.0)
-  Player.SetActorValue(SQL_ActorValueNegative, 0.25)
-  SQL_Mechanics_Global_Age_Threshold.SetValue(SQL_Mechanics_Global_Age_Threshold_Base.GetValue())
-  SQL_Ranks_Global_Positive_105.SetValue(5 as Float)
-  SQL_Ranks_Global_Positive_110.SetValue(10 as Float)
-  SQL_Ranks_Global_Negative_025.SetValue(75 as Float)
-  Player.SendVampirismStateChanged(True)
-  Self.SetAgeVariables()
-EndFunction
-
-Function VampireFeed()
-  VampireTransformDecreaseISMD.applyCrossFade(2.0)
-  Utility.Wait(2.0)
-  ImageSpaceModifier.removeCrossFade(1.0)
-  Game.IncrementStat("Necks Bitten", 1)
-  SQL_Mechanics_Message_VampireFeed.Show(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
-  VampireFeedReady.SetValue(0 as Float)
-  LastFeedTime = GameDaysPassed.value
-  VampireStatus = 1
-  Self.VampireProgression(Player, 1)
-  Self.StopHate(Player, False)
-  Self.UnregisterforUpdateGameTime()
-  Self.RegisterForUpdateGameTime(1.0)
 EndFunction
 
 Function VampireProgression(Actor akPlayer, Int VampireStage)
@@ -359,57 +390,50 @@ Function VampireProgression(Actor akPlayer, Int VampireStage)
   EndIf
 EndFunction
 
-Function AddVampireSpells(Actor akPlayer)
-  Player.AddSpell(SQL_Mortal_Spell_VampiricDrain_Stage1, False)
-  Player.AddSpell(SQL_Mortal_Spell_Power_VampiresSight, False)
-  Player.AddSpell(SQL_Mortal_Spell_Power_VampiresSeduction, False)
-  Player.AddSpell(SQL_Mortal_Spell_Bad_Forsaken_Ab, False)
-  Player.AddSpell(SQL_Mortal_Spell_Bad_MockeryOfLife_Ab, False)
-  Player.AddSpell(SQL_Mortal_Spell_Good_Dominate_Ab, False)
-  Player.AddSpell(SQL_Mortal_Spell_Good_FierceHunger_Ab, False)
-  Player.AddSpell(SQL_Mortal_Spell_Good_StillHeart_Ab, False)
-  Player.AddSpell(SQL_Mortal_Spell_Good_UnderTheIce_Ab, False)
-  Player.AddSpell(SQL_Mechanics_Spell_HiddenVampireAbilities_Ab, False)
-  Player.AddSpell(SQL_Mortal_Spell_Good_NightstalkersStrength_Ab, False)
-EndFunction
-
-Function VampireCure(Actor akPlayer)
-  Game.IncrementStat("Vampirism Cures", 1)
-  Self.UnregisterforUpdateGameTime()
-  VampireStatus = 0
-  Self.StopHate(Player, True)
-  Player.RemoveSpell(SQL_Mortal_Spell_ResistFrost_Ab_Stage1)
-  Player.RemoveSpell(SQL_Mortal_Spell_ResistFrost_Ab_Stage2)
-  Player.RemoveSpell(SQL_Mortal_Spell_ResistFrost_Ab_Stage3)
-  Player.RemoveSpell(SQL_Mortal_Spell_ResistFrost_Ab_Stage4)
-  Player.RemoveSpell(SQL_Mortal_Spell_WeaknessToFire_Ab_Stage1)
-  Player.RemoveSpell(SQL_Mortal_Spell_WeaknessToFire_Ab_Stage2)
-  Player.RemoveSpell(SQL_Mortal_Spell_WeaknessToFire_Ab_Stage3)
-  Player.RemoveSpell(SQL_Mortal_Spell_WeaknessToFire_Ab_Stage4)
-  Player.RemoveSpell(SQL_Mortal_Spell_SunDamage_Ab_Stage1)
-  Player.RemoveSpell(SQL_Mortal_Spell_SunDamage_Ab_Stage2)
-  Player.RemoveSpell(SQL_Mortal_Spell_SunDamage_Ab_Stage3)
-  Player.RemoveSpell(SQL_Mortal_Spell_SunDamage_Ab_Stage4)
-  Player.RemoveSpell(SQL_Stages_Spell_Stage2_Power)
-  Player.RemoveSpell(SQL_Stages_Spell_Stage3_Power)
-  Player.RemoveSpell(SQL_Stages_Spell_Stage4_Power)
-  Player.RemoveSpell(SQL_Scaling_Spell_Stage1_Ab)
-  Player.RemoveSpell(SQL_Scaling_Spell_Stage2_Ab)
-  Player.RemoveSpell(SQL_Scaling_Spell_Stage3_Ab)
-  Player.RemoveSpell(SQL_Scaling_Spell_Stage4_Ab)
-  Player.RemoveSpell(SQL_Mortal_Spell_VampiricDrain_Stage1)
-  Player.RemoveSpell(SQL_Mortal_Spell_VampiricDrain_Stage2_Deprecated)
-  Player.RemoveSpell(SQL_Mortal_Spell_VampiricDrain_Stage3_Deprecated)
-  Player.RemoveSpell(SQL_Mortal_Spell_VampiricDrain_Stage4_Deprecated)
-  Player.RemoveSpell(SQL_Mortal_Spell_Power_VampiresSight)
-  Player.RemoveSpell(SQL_Mortal_Spell_Power_VampiresSeduction)
-  Player.RemoveSpell(SQL_Mortal_Spell_Bad_Forsaken_Ab)
-  Player.RemoveSpell(SQL_Mortal_Spell_Bad_MockeryOfLife_Ab)
-  Player.RemoveSpell(SQL_Mortal_Spell_Good_Dominate_Ab)
-  Player.RemoveSpell(SQL_Mortal_Spell_Good_FierceHunger_Ab)
-  Player.RemoveSpell(SQL_Mortal_Spell_Good_StillHeart_Ab)
-  Player.RemoveSpell(SQL_Mortal_Spell_Good_UnderTheIce_Ab)
-  Player.RemoveSpell(SQL_Mortal_Spell_Good_NightstalkersStrength_Ab)
+Function VampireChange(Actor Target)
+  Game.DisablePlayerControls(True, True, False, False, False, True, True, False, 0)
+  VampireChangeFX.play(Target as ObjectReference, -1.0)
+  VampireTransformIncreaseISMD.applyCrossFade(2.0)
+  ObjectReference myXmarker = Target.PlaceAtMe(XMarker as Form, 1, False, False)
+  MagVampireTransform01.play(myXmarker)
+  myXmarker.Disable(False)
+  Utility.Wait(2.0)
+  ImageSpaceModifier.removeCrossFade(1.0)
+  VampireChangeFX.stop(Target as ObjectReference)
+  Race PlayerRace = Target.GetActorBase().GetRace()
+  CureRace = PlayerRace
+  ; RCS
+  Race VampireRace = RaceCompatibility.GetVampireRaceByRace(PlayerRace)
+  If VampireRace != None
+    Target.SetRace(VampireRace)
+    ; Assign the racial ability through the configured race proxy.
+    Int RaceID = 0
+    Int RaceCount = SQL_Races.GetSize()
+    While RaceID < RaceCount
+      If RaceCompatibility.GetIsRaceByProxy(PlayerRace, SQL_Races.GetAt(RaceID) as Race)
+        RacialSpell = SQL_Racial.GetAt(RaceID) as Spell
+        Target.AddSpell(RacialSpell, False)
+        RaceID = RaceCount
+      Else
+        RaceID += 1
+      EndIf
+    EndWhile
+  Else
+    SQL_Mechanics_Message_RaceBroken.Show(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+    Target.SetRace(NordRaceVampire)
+  EndIf
+  VampireCureDisease.Cast(Target as ObjectReference, None)
+  VampireStatus = 1
+  Self.VampireProgression(Player, 1)
+  Self.AddVampireSpells(Player)
+  Self.RegisterForUpdateGameTime(1.0)
+  LastFeedTime = GameDaysPassed.value
+  PlayerIsVampire.SetValue(1 as Float)
+  Utility.Wait(1.0)
+  Game.EnablePlayerControls(True, True, True, True, True, True, True, True, 0)
+  If VC01.GetStageDone(200) == 1 as Bool
+    VC01.SetStage(25)
+  EndIf
   CurrentAge = 0
   Player.SetActorValue(SQL_ActorValue, 0.0)
   Player.SetActorValue(SQL_ActorValueNegative, 0.25)
@@ -417,37 +441,17 @@ Function VampireCure(Actor akPlayer)
   SQL_Ranks_Global_Positive_105.SetValue(5 as Float)
   SQL_Ranks_Global_Positive_110.SetValue(10 as Float)
   SQL_Ranks_Global_Negative_025.SetValue(75 as Float)
-  SQL_Stages_Global_Dominate_IllusionBonus.SetValue(15 as Float)
-  If CurrentSpell
-    Player.RemoveSpell(CurrentSpell)
-    CurrentSpell = None
-  EndIf
-  Player.RemoveSpell(SQL_Mechanics_Spell_HiddenVampireAbilities_Ab)
-  If !CureRace
-    ; RCS, default to Nord
-    Race MortalRace = RaceCompatibility.GetRaceByVampireRace(Player.GetRace())
-    If MortalRace != None
-      Player.SetRace(MortalRace)
-    Else
-      Player.SetRace(NordRace)
-    EndIf
-  Else
-    Player.SetRace(CureRace)
-  EndIf
-  Player.RemoveSpell(RacialSpell)
-  PlayerIsVampire.SetValue(0 as Float)
-  Player.DispelSpell(SQL_Mortal_Spell_Power_VampiresSight)
-  Player.RemoveSpell(SQL_Mortal_Spell_Power_VampiresSight)
-  Player.SendVampirismStateChanged(False)
+  Player.SendVampirismStateChanged(True)
+  Self.SetAgeVariables()
+  Self.SetAgeAb()
 EndFunction
 
-Function StartHate(Actor akPlayer)
-  Player.AddtoFaction(VampirePCFaction)
-  Int i = 0
-  While i < DLC1VampireHateFactions.GetSize()
-    (DLC1VampireHateFactions.GetAt(i) as Faction).SetPlayerEnemy(True)
-    i += 1
-  EndWhile
+Function VampireFeedBed()
+  Game.GetPlayer().PlayIdle(VampireFeedingBedRight)
+EndFunction
+
+Int Function TestIntegrity()
+  Return 777
 EndFunction
 
 Function StopHate(Actor akPlayer, Bool akForceStopHate)
@@ -462,35 +466,33 @@ Function StopHate(Actor akPlayer, Bool akForceStopHate)
   EndIf
 EndFunction
 
-Function AdvanceAge(Actor akPlayer, Float afAgeAmount)
-  If CurrentAge < 5
-    SQL_Mechanics_Global_Age.Mod(afAgeAmount)
-    If SQL_Mechanics_Global_Age.GetValue() >= SQL_Mechanics_Global_Age_Threshold.GetValue()
-      CurrentAge += 1
-      If CurrentAge == 1
-        SQL_Age_Message_AgeTo2.Show(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
-        Self.SetAgeVariables()
-      ElseIf CurrentAge == 2
-        SQL_Age_Message_AgeTo3.Show(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
-        Self.SetAgeVariables()
-      ElseIf CurrentAge == 3
-        SQL_Age_Message_AgeTo4.Show(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
-        Self.SetAgeVariables()
-      ElseIf CurrentAge == 4
-        SQL_Age_Message_AgeTo5.Show(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
-        Self.SetAgeVariables()
-      ElseIf CurrentAge == 5
-        SQL_Age_Message_AgeTo6.Show(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
-        Self.SetAgeVariables()
-      EndIf
-      If CurrentAge < 5
-        SQL_Mechanics_Global_Age.SetValue(0 as Float)
-        SQL_Mechanics_Global_Age_Threshold.Mod(SQL_Mechanics_Global_Age_Threshold.GetValue() + SQL_Mechanics_Global_Age_Threshold_Add.GetValue())
-      Else
-        SQL_Mechanics_Global_Age.SetValue(SQL_Mechanics_Global_Age_Threshold.GetValue())
-      EndIf
-    EndIf
-  EndIf
+Function VampireFeedBedRoll()
+  Game.GetPlayer().PlayIdle(VampireFeedingBedrollRight)
+EndFunction
+
+Function StartHate(Actor akPlayer)
+  Player.AddtoFaction(VampirePCFaction)
+  Int i = 0
+  While i < DLC1VampireHateFactions.GetSize()
+    (DLC1VampireHateFactions.GetAt(i) as Faction).SetPlayerEnemy(True)
+    i += 1
+  EndWhile
+EndFunction
+
+Function VampireFeed()
+  VampireTransformDecreaseISMD.applyCrossFade(2.0)
+  Utility.Wait(2.0)
+  ImageSpaceModifier.removeCrossFade(1.0)
+  Game.IncrementStat("Necks Bitten", 1)
+  SQL_Mechanics_Message_VampireFeed.Show(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+  VampireFeedReady.SetValue(0 as Float)
+  LastFeedTime = GameDaysPassed.value
+  VampireStatus = 1
+  Self.VampireProgression(Player, 1)
+  Self.StopHate(Player, False)
+  Self.UnregisterforUpdateGameTime()
+  Self.RegisterForUpdateGameTime(1.0)
+  (DLC1VampireLordTrackingQuest as dlc1vampiretrackingquest).PlayerRace = Game.GetPlayer().GetRace()
 EndFunction
 
 Function SetAgeVariables()
@@ -549,4 +551,48 @@ Function SetAgeVariables()
     SQL_Ranks_Global_Negative_050.SetValue(25 as Float)
     SQL_Stages_Global_Dominate_IllusionBonus.SetValue(40 as Float)
   EndIf
+EndFunction
+
+Function SetAgeAb()
+  If CurrentAge == 0
+    Player.RemoveSpell(SQL_Mortal_Spell_Age_Ab_Age1_Description)
+    Player.RemoveSpell(SQL_Mortal_Spell_Age_Ab_Age2_Description)
+    Player.RemoveSpell(SQL_Mortal_Spell_Age_Ab_Age3_Description)
+    Player.RemoveSpell(SQL_Mortal_Spell_Age_Ab_Age4_Description)
+    Player.RemoveSpell(SQL_Mortal_Spell_Age_Ab_Age5_Description)
+  ElseIf CurrentAge == 1
+    Player.AddSpell(SQL_Mortal_Spell_Age_Ab_Age1_Description, False)
+    Player.RemoveSpell(SQL_Mortal_Spell_Age_Ab_Age2_Description)
+    Player.RemoveSpell(SQL_Mortal_Spell_Age_Ab_Age3_Description)
+    Player.RemoveSpell(SQL_Mortal_Spell_Age_Ab_Age4_Description)
+    Player.RemoveSpell(SQL_Mortal_Spell_Age_Ab_Age5_Description)
+  ElseIf CurrentAge == 2
+    Player.RemoveSpell(SQL_Mortal_Spell_Age_Ab_Age1_Description)
+    Player.AddSpell(SQL_Mortal_Spell_Age_Ab_Age2_Description, False)
+    Player.RemoveSpell(SQL_Mortal_Spell_Age_Ab_Age3_Description)
+    Player.RemoveSpell(SQL_Mortal_Spell_Age_Ab_Age4_Description)
+    Player.RemoveSpell(SQL_Mortal_Spell_Age_Ab_Age5_Description)
+  ElseIf CurrentAge == 3
+    Player.RemoveSpell(SQL_Mortal_Spell_Age_Ab_Age1_Description)
+    Player.RemoveSpell(SQL_Mortal_Spell_Age_Ab_Age2_Description)
+    Player.AddSpell(SQL_Mortal_Spell_Age_Ab_Age3_Description, False)
+    Player.RemoveSpell(SQL_Mortal_Spell_Age_Ab_Age4_Description)
+    Player.RemoveSpell(SQL_Mortal_Spell_Age_Ab_Age5_Description)
+  ElseIf CurrentAge == 4
+    Player.RemoveSpell(SQL_Mortal_Spell_Age_Ab_Age1_Description)
+    Player.RemoveSpell(SQL_Mortal_Spell_Age_Ab_Age2_Description)
+    Player.RemoveSpell(SQL_Mortal_Spell_Age_Ab_Age3_Description)
+    Player.AddSpell(SQL_Mortal_Spell_Age_Ab_Age4_Description, False)
+    Player.RemoveSpell(SQL_Mortal_Spell_Age_Ab_Age5_Description)
+  ElseIf CurrentAge == 5
+    Player.RemoveSpell(SQL_Mortal_Spell_Age_Ab_Age1_Description)
+    Player.RemoveSpell(SQL_Mortal_Spell_Age_Ab_Age2_Description)
+    Player.RemoveSpell(SQL_Mortal_Spell_Age_Ab_Age3_Description)
+    Player.RemoveSpell(SQL_Mortal_Spell_Age_Ab_Age4_Description)
+    Player.AddSpell(SQL_Mortal_Spell_Age_Ab_Age5_Description, False)
+  EndIf
+EndFunction
+
+Spell Function GetCurrentSpell()
+  Return CurrentSpell
 EndFunction
