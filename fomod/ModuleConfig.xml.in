@@ -125,7 +125,7 @@ If you are not going to do that, or if you have other mods that rewrite the same
                             </typeDescriptor>
                         </plugin>
 
-                        <plugin name="Better Vampires v9.1">
+                        <plugin name="Better Vampires v9.2">
                             <description>Select this if you are using Better Vampires</description>
                             <image path="fomod/images/better-vampires.png" />
                             <files>

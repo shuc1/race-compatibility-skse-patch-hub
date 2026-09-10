@@ -3,7 +3,7 @@ set_xmakever("2.9.9")
 
 projectname = "Race Compatibility SKSE-Patch Hub"
 papyrusname = "RaceCompatibility" -- for potential overridden by papyrus implementation
-set_version("2.1.9")
+set_version("2.1.10")
 
 -- rules
 rule("papyrus", function()
