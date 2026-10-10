@@ -2,13 +2,6 @@
 includes("@builtin/xpack")
 
 local projectname = projectname
-local papyrusname = papyrusname
-
-set_configdir("$(projectdir)")
-add_configfiles("fomod/(**.xml.in)", {prefixdir = "fomod/"})
-set_configvar("PROJECT_TITLE", projectname)
-set_configvar("PAPYRUS_NAME", papyrusname)
-add_configfiles("(extern/main/res/scripts/source/RaceCompatibility.psc.in)", {prefixdir = prefixdir})
 
 xpack("release", function()
     set_formats("zip")
@@ -42,13 +35,9 @@ xpack("release", function()
             description = [[
 Please check the description page for details.
 
-Update the patch for Better Vampires v9.2.
+Update patches for USSEP and USMP, reorganize FOMOD structure.
 
 If you find any issues caused by the patches, please report them here and don't bother the mod authors. Thanks!]],
         }))
     end)
 end)
-
--- empty target for config file generation
-target("config")
-    set_kind("phony")

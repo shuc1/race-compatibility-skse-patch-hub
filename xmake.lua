@@ -2,8 +2,7 @@
 set_xmakever("2.9.9")
 
 projectname = "Race Compatibility SKSE-Patch Hub"
-papyrusname = "RaceCompatibility" -- for potential overridden by papyrus implementation
-set_version("2.1.10")
+set_version("2.2.0")
 
 -- rules
 rule("papyrus", function()
@@ -83,19 +82,47 @@ function get_papyrus_source_subdirs(dir)
 end
 
 for subdir, _ in pairs(get_papyrus_source_subdirs("patch/")) do
-    -- print("Adding patch subdir: " .. subdir)
-    target_name = path.basename(path.directory(path.directory(subdir)))
+    local category = path.basename(path.directory(path.directory(path.directory(subdir))))
+    local mod_name = path.basename(path.directory(path.directory(subdir)))
+    local target_name = category .. "." .. mod_name
     target(target_name, function()
         add_rules("papyrus")
-
         add_files(subdir .. "/**.psc")
-        potential_include = "include/" .. target_name
-        -- print("Potential include: " .. potential_include)
+        local potential_include = "include/" .. mod_name
         if os.exists(potential_include) then
             add_includedirs(potential_include)
         end
     end)
 end
+
+target("config", function()
+    set_kind("phony")
+    set_default(true)
+    set_configdir("$(projectdir)")
+    add_configfiles("fomod/(**.xml.in)", {prefixdir = "fomod/"})
+    set_configvar("PROJECT_TITLE", projectname)
+    set_configvar("PAPYRUS_NAME", "RaceCompatibility")
+    add_configfiles("(extern/main/res/scripts/source/RaceCompatibility.psc.in)")
+
+    on_load(function(target)
+        import("core.base.json")
+        local mods = json.loadfile("mods.json")
+
+        local function xml_escape(s)
+            local escaped = tostring(s)
+                :gsub("&", "&amp;")
+                :gsub("<", "&lt;")
+                :gsub('"', "&quot;")
+            return escaped
+        end
+
+        for id, mod in pairs(mods) do
+            if mod.version ~= nil and mod.version ~= json.null then
+                target:set("configvar", id:upper():gsub("-", "_") .. "_VERSION", xml_escape(mod.version))
+            end
+        end
+    end)
+end)
 
 -- xpack
 includes("xpack.lua")

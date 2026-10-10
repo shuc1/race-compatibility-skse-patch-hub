@@ -1,0 +1,63 @@
+{
+  "ussep": {
+    "name": "USSEP",
+    "version": "4.3.9c",
+    "nexus_id": 266
+  },
+  "better-vampires": {
+    "name": "Better Vampires",
+    "version": "9.2",
+    "nexus_id": 1925
+  },
+  "scion": {
+    "name": "Scion",
+    "version": "2.2.2",
+    "nexus_id": 41639
+  },
+  "sacrilege": {
+    "name": "Sacrilege",
+    "version": "2.2.2",
+    "nexus_id": 42408
+  },
+  "sacrosanct": {
+    "name": "Sacrosanct",
+    "version": "6.0.0",
+    "nexus_id": 3928
+  },
+  "immortal-blood": {
+    "name": "Immortal Blood",
+    "version": "2.1",
+    "nexus_id": 101470
+  },
+  "bloodlines-of-tamriel": {
+    "name": "Bloodlines of Tamriel",
+    "version": "1.1",
+    "nexus_id": 42938
+  },
+  "usmp": {
+    "name": "USMP",
+    "version": "2.6.8b",
+    "nexus_id": 49616
+  },
+  "at-your-own-pace": {
+    "name": "At Your Own Pace - Companions",
+    "version": "3.0.4CP",
+    "nexus_id": 52704,
+    "file_name": "At Your Own Pace - Companions"
+  },
+  "growl": {
+    "name": "Growl",
+    "version": "3.7.2",
+    "nexus_id": 31245
+  },
+  "imperious": {
+    "name": "Imperious",
+    "version": "7.28.0",
+    "nexus_id": 1315
+  },
+  "busy-follower-framework": {
+    "name": "Busy Follower Framework",
+    "version": "1.1",
+    "nexus_id": 112076
+  }
+}

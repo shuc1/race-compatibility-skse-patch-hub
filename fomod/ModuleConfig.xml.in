@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="http://qconsulting.ca/fo3/ModConfig5.0.xsd">
     <moduleName>${PROJECT_TITLE}</moduleName>
@@ -88,7 +88,7 @@ If you are not going to do that, or if you have other mods that rewrite the same
                             <image path="fomod/images/patch.png" />
                             <files>
                                 <folder
-                                    source="script/vampire-lord-transform/dawnguard"
+                                    source="script/vampire/dawnguard"
                                     destination="./" priority="-1" />
                             </files>
                             <typeDescriptor>
@@ -98,10 +98,10 @@ If you are not going to do that, or if you have other mods that rewrite the same
                     </plugins>
                 </group>
 
-                <group name="Vampire Overhaul" type="SelectAtMostOne">
+                <group name="Vampire Transform" type="SelectAtMostOne">
                     <plugins order="Explicit">
 
-                        <plugin name="USSEP">
+                        <plugin name="USSEP v${USSEP_VERSION}">
                             <description>Select this if you are using Unofficial Skyrim Special Edition Patch - USSEP</description>
                             <image path="fomod/images/ussep.jpg" />
                             <files>
@@ -125,7 +125,7 @@ If you are not going to do that, or if you have other mods that rewrite the same
                             </typeDescriptor>
                         </plugin>
 
-                        <plugin name="Better Vampires v9.2">
+                        <plugin name="Better Vampires v${BETTER_VAMPIRES_VERSION}">
                             <description>Select this if you are using Better Vampires</description>
                             <image path="fomod/images/better-vampires.png" />
                             <files>
@@ -149,7 +149,7 @@ If you are not going to do that, or if you have other mods that rewrite the same
                             </typeDescriptor>
                         </plugin>
 
-                        <plugin name="Scion v2.2.2">
+                        <plugin name="Scion v${SCION_VERSION}">
                             <description>Select this if you are using Scion</description>
                             <image path="fomod/images/scion.jpg" />
                             <files>
@@ -171,7 +171,7 @@ If you are not going to do that, or if you have other mods that rewrite the same
                             </typeDescriptor>
                         </plugin>
 
-                        <plugin name="Sacrilege v2.2.2">
+                        <plugin name="Sacrilege v${SACRILEGE_VERSION}">
                             <description>Select this if you are using Sacrilege - Minimalistic Vampires of Skyrim</description>
                             <image path="fomod/images/sacrilege.jpg" />
                             <files>
@@ -195,7 +195,7 @@ If you are not going to do that, or if you have other mods that rewrite the same
                             </typeDescriptor>
                         </plugin>
 
-                        <plugin name="Sacrosanct v6.0.0">
+                        <plugin name="Sacrosanct v${SACROSANCT_VERSION}">
                             <description>Select this if you are using Sacrosanct - Vampires of Skyrim</description>
                             <image path="fomod/images/sacrosanct.jpg" />
                             <files>
@@ -219,7 +219,7 @@ If you are not going to do that, or if you have other mods that rewrite the same
                             </typeDescriptor>
                         </plugin>
 
-                        <plugin name="Immortal Blood v2.1">
+                        <plugin name="Immortal Blood v${IMMORTAL_BLOOD_VERSION}">
                             <description>Select this if you are using Immortal Blood - Vampire Overhaul</description>
                             <image path="fomod/images/immortal-blood.jpg" />
                             <files>
@@ -243,7 +243,7 @@ If you are not going to do that, or if you have other mods that rewrite the same
                             </typeDescriptor>
                         </plugin>
 
-                        <plugin name="Bloodlines of Tamriel v1.1">
+                        <plugin name="Bloodlines of Tamriel v${BLOODLINES_OF_TAMRIEL_VERSION}">
                             <description>Select this if you are using Bloodlines of Tamriel - A Vampire Overhaul</description>
                             <image path="fomod/images/bloodlines-of-tamriel.jpg" />
                             <files>
@@ -276,10 +276,34 @@ If you are not going to do that, or if you have other mods that rewrite the same
         <installStep name="Werewolf">
             <optionalFileGroups order="Explicit">
 
-                <group name="Werewolf Overhual" type="SelectAtMostOne">
+                <group name="Werewolf Transfrom(Companions)" type="SelectAtMostOne">
                     <plugins order="Explicit">
 
-                        <plugin name="USMP v2.6.4">
+                        <plugin name="USSEP v${USSEP_VERSION}">
+                            <description>Select this if you are using Unofficial Skyrim Special Edition Patch - USSEP</description>
+                            <image path="fomod/images/ussep.jpg" />
+                            <files>
+                                <folder source="script/werewolf/ussep"
+                                    destination="./" priority="0" />
+                            </files>
+                            <typeDescriptor>
+                                <dependencyType>
+                                    <defaultType name="Optional" />
+                                    <patterns>
+                                        <pattern>
+                                            <dependencies operator="And">
+                                                <fileDependency
+                                                    file="unofficial skyrim special edition patch.esp"
+                                                    state="Active" />
+                                            </dependencies>
+                                            <type name="Recommended" />
+                                        </pattern>
+                                    </patterns>
+                                </dependencyType>
+                            </typeDescriptor>
+                        </plugin>
+
+                        <plugin name="USMP v${USMP_VERSION}">
                             <description>Select this if you are using Unofficial Skyrim Modder's Patch - USMP SE</description>
                             <image path="fomod/images/usmp.jpg" />
                             <files>
@@ -303,7 +327,7 @@ If you are not going to do that, or if you have other mods that rewrite the same
                             </typeDescriptor>
                         </plugin>
 
-                        <plugin name="At Your Own Pace - Companions v3.0.4CP">
+                        <plugin name="At Your Own Pace - Companions v${AT_YOUR_OWN_PACE_VERSION}">
                             <description>Select this if you are using At Your Own Pace - Companions</description>
                             <image path="fomod/images/at-your-own-pace.jpg" />
                             <files>
@@ -326,16 +350,44 @@ If you are not going to do that, or if you have other mods that rewrite the same
                                 </dependencyType>
                             </typeDescriptor>
                         </plugin>
+
+                        <plugin name="Busy Follower Framework v${BUSY_FOLLOWER_FRAMEWORK_VERSION}">
+                            <description>Select this if you are using Busy Follower Framework.</description>
+                            <image path="fomod/images/busy-follower-framework.jpg" />
+                            <files>
+                                <folder source="script/werewolf/busy-follower-framework"
+                                    destination="./" priority="0" />
+                            </files>
+                            <typeDescriptor>
+                                <dependencyType>
+                                    <defaultType name="Optional" />
+                                    <patterns>
+                                        <pattern>
+                                            <dependencies operator="And">
+                                                <fileDependency
+                                                    file="BusyFollowerFramework.esp"
+                                                    state="Active" />
+                                            </dependencies>
+                                            <type name="Recommended" />
+                                        </pattern>
+                                    </patterns>
+                                </dependencyType>
+                            </typeDescriptor>
+                        </plugin>
                     </plugins>
                 </group>
+            </optionalFileGroups>
+        </installStep>
 
-                <group name="Miscellaneous" type="SelectAny">
+        <installStep name="Miscellaneous">
+            <optionalFileGroups order="Explicit">
+                <group name="" type="SelectAny">
                     <plugins>
-                        <plugin name="Growl v3.7.2">
+                        <plugin name="Growl v${GROWL_VERSION}">
                             <description>Select this if you are using Growl - Werebeasts of Skyrim</description>
                             <image path="fomod/images/growl.jpg" />
                             <files>
-                                <folder source="script/werewolf/growl"
+                                <folder source="script/misc/growl"
                                     destination="./" priority="0" />
                             </files>
                             <typeDescriptor>
@@ -354,17 +406,35 @@ If you are not going to do that, or if you have other mods that rewrite the same
                                 </dependencyType>
                             </typeDescriptor>
                         </plugin>
-                    </plugins>
-                </group>
 
-            </optionalFileGroups>
-        </installStep>
+                        <plugin name="USSEP v${USSEP_VERSION}">
+                            <description>
+Select this if you are using Unofficial Skyrim Special Edition Patch - USSEP.
 
-        <installStep name="Miscellaneous">
-            <optionalFileGroups order="Explicit">
-                <group name="Ability/Quest" type="SelectAny">
-                    <plugins>
-                        <plugin name="Imperious v7.28.0">
+Supports race proxies for DA04 blood harvesting and Imperial race perk initialization in MQ102. Can be installed alongside any vampire patch.</description>
+                            <image path="fomod/images/ussep.jpg" />
+                            <files>
+                                <folder source="script/misc/ussep"
+                                    destination="./" priority="0" />
+                            </files>
+                            <typeDescriptor>
+                                <dependencyType>
+                                    <defaultType name="Optional" />
+                                    <patterns>
+                                        <pattern>
+                                            <dependencies operator="And">
+                                                <fileDependency
+                                                    file="unofficial skyrim special edition patch.esp"
+                                                    state="Active" />
+                                            </dependencies>
+                                            <type name="Recommended" />
+                                        </pattern>
+                                    </patterns>
+                                </dependencyType>
+                            </typeDescriptor>
+                        </plugin>
+
+                        <plugin name="Imperious v${IMPERIOUS_VERSION}">
                             <description>Select this if you are using Imperious - Races of Skyrim</description>
                             <image path="fomod/images/imperious.jpg" />
                             <files>
@@ -379,34 +449,6 @@ If you are not going to do that, or if you have other mods that rewrite the same
                                             <dependencies operator="And">
                                                 <fileDependency
                                                     file="Imperious - Races of Skyrim.esp"
-                                                    state="Active" />
-                                            </dependencies>
-                                            <type name="Recommended" />
-                                        </pattern>
-                                    </patterns>
-                                </dependencyType>
-                            </typeDescriptor>
-                        </plugin>
-                    </plugins>
-                </group>
-
-                <group name="Follower" type="SelectAny">
-                    <plugins>
-                        <plugin name="Busy Follower Framework v1.1">
-                            <description>Select this if you are using Busy Follower Framework</description>
-                            <image path="fomod/images/busy-follower-framework.jpg" />
-                            <files>
-                                <folder source="script/misc/busy-follower-framework"
-                                    destination="./" priority="0" />
-                            </files>
-                            <typeDescriptor>
-                                <dependencyType>
-                                    <defaultType name="Optional" />
-                                    <patterns>
-                                        <pattern>
-                                            <dependencies operator="And">
-                                                <fileDependency
-                                                    file="BusyFollowerFramework.esp"
                                                     state="Active" />
                                             </dependencies>
                                             <type name="Recommended" />

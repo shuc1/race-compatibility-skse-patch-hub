@@ -1,0 +1,30 @@
+name: Check Nexus Mods updates
+
+on:
+  schedule:
+    - cron: '17 0 1,15 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: check-nexus-mods
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Nexus Mods
+        env:
+          NEXUSMODS_API_KEY: ${{ secrets.NEXUSMODS_API_KEY }}
+        run: bash .github/scripts/check-nexus-mods.sh > "$RUNNER_TEMP/nexus-results.json"
+
+      - name: Sync GitHub Issues
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: bash .github/scripts/sync-nexus-issues.sh "$RUNNER_TEMP/nexus-results.json"

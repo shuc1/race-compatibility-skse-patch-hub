@@ -108,10 +108,9 @@ Spell Property HircinesRingPower auto
 
 Race Property PlayerOriginalRace auto
 
-; BEGING - Support for RaceCompatibility
+; Legacy RaceCompatibility properties
 FormList Property PlayableRaceList Auto
 FormList Property PlayableVampireList Auto
-; END - Support for RaceCompatibility
 
 Race Property ArgonianRace auto
 Race Property ArgonianRaceVampire auto
@@ -392,39 +391,10 @@ Function PlayerJoin()
 	; set up the spell tracking so the first time you cast it doesn't count
 	PlayerIsWerewolfVirgin = true
 
-	; RaceCompatibility: set player original race and apply cure if player is a vampire
-	SetPlayerOriginalRace()
-; 	if     (PlayerOriginalRace == ArgonianRaceVampire)
-; ; 		Debug.Trace("CSQ: Player was Argonian Vampire; storing as Argonian.")
-; 		PlayerOriginalRace = ArgonianRace
-; 	elseif (PlayerOriginalRace == BretonRaceVampire)
-; ; 		Debug.Trace("CSQ: Player was Breton Vampire; storing as Breton.")
-; 		PlayerOriginalRace = BretonRace
-; 	elseif (PlayerOriginalRace == DarkElfRaceVampire)
-; ; 		Debug.Trace("CSQ: Player was Dark Elf Vampire; storing as Dark Elf.")
-; 		PlayerOriginalRace = DarkElfRace
-; 	elseif (PlayerOriginalRace == HighElfRaceVampire)
-; ; 		Debug.Trace("CSQ: Player was High Elf Vampire; storing as High Elf.")
-; 		PlayerOriginalRace = HighElfRace
-; 	elseif (PlayerOriginalRace == ImperialRaceVampire)
-; ; 		Debug.Trace("CSQ: Player was Imperial Vampire; storing as Imperial.")
-; 		PlayerOriginalRace = ImperialRace
-; 	elseif (PlayerOriginalRace == KhajiitRaceVampire)
-; ; 		Debug.Trace("CSQ: Player was Khajiit Vampire; storing as Khajiit.")
-; 		PlayerOriginalRace = KhajiitRace
-; 	elseif (PlayerOriginalRace == NordRaceVampire)
-; ; 		Debug.Trace("CSQ: Player was Nord Vampire; storing as Nord.")
-; 		PlayerOriginalRace = NordRace
-; 	elseif (PlayerOriginalRace == OrcRaceVampire)
-; ; 		Debug.Trace("CSQ: Player was Orc Vampire; storing as Orc.")
-; 		PlayerOriginalRace = OrcRace
-; 	elseif (PlayerOriginalRace == RedguardRaceVampire)
-; ; 		Debug.Trace("CSQ: Player was Redguard Vampire; storing as Redguard.")
-; 		PlayerOriginalRace = RedguardRace
-; 	elseif (PlayerOriginalRace == WoodElfRaceVampire)
-; ; 		Debug.Trace("CSQ: Player was Wood Elf Vampire; storing as Wood Elf.")
-; 		PlayerOriginalRace = WoodElfRace
-; 	endif
+	; get player's race so we have it permanently for werewolf switch back
+	SetOriginalRace()
+; 	Debug.Trace("CSQ: Storing player's race as " + PlayerOriginalRace)
+
 
 ; 	Debug.Trace("CSQ: Storing player's race as " + PlayerOriginalRace)
 	
@@ -432,16 +402,16 @@ Function PlayerJoin()
 	Game.AddAchievement(9)
 EndFunction
 
-Function SetPlayerOriginalRace()
-	; get player's race so we have it permanently for werewolf switch back
+; RCS - Support for Race Compatibility SKSE
+Function SetOriginalRace()
 	PlayerOriginalRace = Game.GetPlayer().GetRace()
-	; RCS, cure vampirism
+	; RCS: map vampire race back to mortal race
 	Race OriginalRace = RaceCompatibility.GetRaceByVampireRace(PlayerOriginalRace)
-	If (OriginalRace != None)
+	If OriginalRace != None
 		PlayerOriginalRace = OriginalRace
 	EndIf
-; 	Debug.Trace("CSQ: Storing player's race as " + PlayerOriginalRace)
 EndFunction
+; END - Support for Race Compatibility SKSE
 
 Function OpenSkyforge()
 	; set up Eorlund to sell you stuff
