@@ -434,6 +434,34 @@ Supports race proxies for DA04 blood harvesting and Imperial race perk initializ
                             </typeDescriptor>
                         </plugin>
 
+                        <plugin name="Whiterun without Main Quest v${WHITERUN_WITHOUT_MAIN_QUEST_VERSION}">
+                            <description>Select this if you are using Whiterun without Main Quest - Civil War and Thane for Non-Dragonborn</description>
+                            <image path="fomod/images/whiterun-without-main-quest.jpg" />
+                            <files>
+                                <!-- Same destination as script/misc/ussep (qf_mq102_0004e50d.pex,
+                                     filename case matched on purpose so the installer sees one
+                                     target file). Higher priority than script/misc/ussep (1),
+                                     so this build of the script wins. -->
+                                <folder source="script/misc/whiterun-without-main-quest"
+                                    destination="./" priority="1" />
+                            </files>
+                            <typeDescriptor>
+                                <dependencyType>
+                                    <defaultType name="Optional" />
+                                    <patterns>
+                                        <pattern>
+                                            <dependencies operator="And">
+                                                <fileDependency
+                                                    file="Whiterun without Main Quest.esp"
+                                                    state="Active" />
+                                            </dependencies>
+                                            <type name="Recommended" />
+                                        </pattern>
+                                    </patterns>
+                                </dependencyType>
+                            </typeDescriptor>
+                        </plugin>
+
                         <plugin name="Imperious v${IMPERIOUS_VERSION}">
                             <description>Select this if you are using Imperious - Races of Skyrim</description>
                             <image path="fomod/images/imperious.jpg" />

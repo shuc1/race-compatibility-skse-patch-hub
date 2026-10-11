@@ -2,7 +2,7 @@
 set_xmakever("2.9.9")
 
 projectname = "Race Compatibility SKSE-Patch Hub"
-set_version("2.2.0")
+set_version("2.2.1")
 
 -- rules
 rule("papyrus", function()

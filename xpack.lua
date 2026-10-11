@@ -35,7 +35,7 @@ xpack("release", function()
             description = [[
 Please check the description page for details.
 
-Update patches for USSEP and USMP, reorganize FOMOD structure.
+Add patch for Whiterun without Main Quest (Imperial race perk in MQ102).
 
 If you find any issues caused by the patches, please report them here and don't bother the mod authors. Thanks!]],
         }))
