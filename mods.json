@@ -27,7 +27,8 @@
   "immortal-blood": {
     "name": "Immortal Blood",
     "version": "2.1",
-    "nexus_id": 101470
+    "nexus_id": 101470,
+    "file_name": "Immortal Blood"
   },
   "bloodlines-of-tamriel": {
     "name": "Bloodlines of Tamriel",
@@ -64,5 +65,10 @@
     "name": "Whiterun without Main Quest - Civil War and Thane for Non-Dragonborn",
     "version": "1.0.13",
     "nexus_id": 87903
+  },
+  "wintersun": {
+    "name": "Wintersun - Faiths of Skyrim",
+    "version": "3.3.0",
+    "nexus_id": 22506
   }
 }

@@ -35,7 +35,7 @@ xpack("release", function()
             description = [[
 Please check the description page for details.
 
-Add patch for Whiterun without Main Quest (Imperial race perk in MQ102).
+Add patch for Wintersun - Faiths of Skyrim v3.3.0.
 
 If you find any issues caused by the patches, please report them here and don't bother the mod authors. Thanks!]],
         }))

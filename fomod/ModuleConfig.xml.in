@@ -434,7 +434,8 @@ Supports race proxies for DA04 blood harvesting and Imperial race perk initializ
                             </typeDescriptor>
                         </plugin>
 
-                        <plugin name="Whiterun without Main Quest v${WHITERUN_WITHOUT_MAIN_QUEST_VERSION}">
+                        <plugin
+                            name="Whiterun without Main Quest v${WHITERUN_WITHOUT_MAIN_QUEST_VERSION}">
                             <description>Select this if you are using Whiterun without Main Quest - Civil War and Thane for Non-Dragonborn</description>
                             <image path="fomod/images/whiterun-without-main-quest.jpg" />
                             <files>
@@ -477,6 +478,30 @@ Supports race proxies for DA04 blood harvesting and Imperial race perk initializ
                                             <dependencies operator="And">
                                                 <fileDependency
                                                     file="Imperious - Races of Skyrim.esp"
+                                                    state="Active" />
+                                            </dependencies>
+                                            <type name="Recommended" />
+                                        </pattern>
+                                    </patterns>
+                                </dependencyType>
+                            </typeDescriptor>
+                        </plugin>
+
+                        <plugin name="Wintersun v${WINTERSUN_VERSION}">
+                            <description>Select this if you are using Wintersun - Faiths of Skyrim.</description>
+                            <image path="fomod/images/wintersun.jpg" />
+                            <files>
+                                <folder source="script/misc/wintersun"
+                                    destination="./" priority="1" />
+                            </files>
+                            <typeDescriptor>
+                                <dependencyType>
+                                    <defaultType name="Optional" />
+                                    <patterns>
+                                        <pattern>
+                                            <dependencies operator="And">
+                                                <fileDependency
+                                                    file="Wintersun - Faiths of Skyrim.esp"
                                                     state="Active" />
                                             </dependencies>
                                             <type name="Recommended" />
